@@ -7,6 +7,7 @@ from bjjheroes.items import BjjheroesItem
 
 base_url = 'http://www.bjjheroes.com'
 
+
 class BasicSpider(scrapy.Spider):
     name = "basic"
     allowed_domains = ["bjjheroes.com"]
@@ -37,12 +38,12 @@ class BasicSpider(scrapy.Spider):
             request.meta['item'] = item
             yield request
 
-
-    def parse_info(self, response):
+    @staticmethod
+    def parse_info(response):
         item = response.meta['item']
         item['url'] = response.url
         sel = Selector(response)
         raw = sel.xpath('//*[@id="post-2729"]/div/*/text()').extract()
-        content =  [x for x in raw if x != '\n' and x != ' ' and '\r\n' not in x and x != '\n \n \n']
+        content = [x for x in raw if x != '\n' and x != ' ' and '\r\n' not in x and x != '\n \n \n']
         item['content'] = content
         yield item
